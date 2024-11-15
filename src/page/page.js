@@ -1,14 +1,12 @@
-import {React, useState}  from "react"
+import {React, useState, useEffect}  from "react"
+import axios from "axios"
 
 function Page() {
-
-    const [getResult,setResult] = useState()
-    const https = "https://8fj0hojx1g.execute-api.eu-central-1.amazonaws.com/dev/hello"
-    const authHeaders = {'x-api-key': ""  ,   'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,'Content-Type': 'application/json'}
-
-  const tabel = {}
-
+    const [getResult,setResult] = useState({'Item':[]})
+    const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
+    const authHeaders = {}
+    const tabel = {}
+    console.log(getResult)
     const rate = (id_place) => {
       postItem({'id_place':id_place, 'rate': tabel[id_place]})
     }
@@ -47,88 +45,63 @@ function Page() {
     </div>
     }
     const getItems = () => {
-        /*fetch(https,{'headers': authHeaders,'mode': 'cors'})
-            .then(response => response.json())
-            .then(data => setResult(data))
-            .catch(error => console.log(error))*/
-            setResult({'Item':[
-                {
-                    "id_place": "2",
-                    "name": "PIZZICA",
-                    "number_of_vote": "1",
-                    "rateing": "5"
-                },
-                {
-                    "id_place": "1",
-                    "name": "Hari",
-                    "number_of_vote": "100",
-                    "rateing": "4.5"
-                },
-                {
-                    "id_place": "4",
-                    "name": "meki",
-                    "number_of_vote": "1",
-                    "rateing": "5"
-                },
-                {
-                    "id_place": "3",
-                    "name": "manu",
-                    "number_of_vote": "1",
-                    "rateing": "5"
-                }
-            ]})
-        }
-        const stars = (id) => {
-            return <form class="rating" id={id}>
-            <label>
-              <input type="radio" name="stars" value="1"  onClick={() => {tabel[id] = 1}}/>
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="2" onClick={() => {tabel[id] = 2}} />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="3"  onClick={() => {tabel[id] = 3}}/>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>   
-            </label>
-            <label>
-              <input type="radio" name="stars" value="4"  onClick={() => {tabel[id] = 4}} />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="5" onClick={() => {tabel[id] = 5}} />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-          </form>
-        }
+        fetch(https, {mode: "cors", headers: {}})
+            .then(result => result.json())
+            .then(data => setResult({'Item':data}))
+            .catch(error => console.log(error))
+    }
+
+    const stars = (id) => {
+        return <form class="rating" id={id}>
+        <label>
+          <input type="radio" name="stars" value="1"  onClick={() => {tabel[id] = 1}}/>
+          <span class="icon">★</span>
+        </label>
+        <label>
+          <input type="radio" name="stars" value="2" onClick={() => {tabel[id] = 2}} />
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+        </label>
+        <label>
+          <input type="radio" name="stars" value="3"  onClick={() => {tabel[id] = 3}}/>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>   
+        </label>
+        <label>
+          <input type="radio" name="stars" value="4"  onClick={() => {tabel[id] = 4}} />
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+        </label>
+        <label>
+          <input type="radio" name="stars" value="5" onClick={() => {tabel[id] = 5}} />
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+          <span class="icon">★</span>
+        </label>
+      </form>
+    }
 
 
-        const renderTableData = () => {
-            return getResult?.Item.map((item, index) => {
-              const { id, name, number_of_vote, rateing , id_place} = item;
-              return (
-                <tr key={id}>
-                  <td>{name}</td>
-                  <td>{number_of_vote}</td>
-                  <td>{rateing}</td>
-                  <td>{stars(id_place)}</td>
-                  <td><button class="add" onClick={() => rate(id_place)}>Rate</button></td>
-                </tr>
-              )
-            });
-          }
-        getResult?.Item.map((item) => {console.log(item)})
+    const renderTableData = () => {
+        if (getResult == undefined) {return null}
+        return getResult?.Item.map((item, index) => {
+          const { id, name, number_of_vote, rateing , id_place} = item;
+          return (
+            <tr key={id}>
+              <td>{name}</td>
+              <td>{number_of_vote}</td>
+              <td>{rateing}</td>
+              <td>{stars(id_place)}</td>
+              <td><button class="add" onClick={() => rate(id_place)}>Rate</button></td>
+            </tr>
+          )
+        });
+      }
 
     return (
     <div>
