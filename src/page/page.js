@@ -4,6 +4,7 @@ import axios from "axios"
 function Page() {
   const [getResult, setResult] = useState({ 'Item': [] })
   const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
+//  const https = "asd"
   const authHeaders = {}
   const tabel = {}
   console.log(getResult)
@@ -51,32 +52,40 @@ function Page() {
       .catch(error => console.log(error))
   }
 
-  const stars = (id) => {
+  const getItemsSorted = (key) => {
+    fetch(`${https}?sortBy=${key}`, { mode: "cors", headers: {} })
+    .then(result => result.json())
+    .then(data => setResult({ 'Item': data }))
+    .catch(error => console.log(error))
+  }
+
+  const stars = (id, def) => {
+    tabel[id] = def
     return <form class="rating" id={id}>
       <label>
-        <input type="radio" name="stars" value="1" onClick={() => { tabel[id] = 1 }} />
+        <input type="radio" name="stars" value="1" onClick={() => { tabel[id] = 1 }} checked={def === 1 ? "checked" : ""}/>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="2" onClick={() => { tabel[id] = 2 }} />
-        <span class="icon">★</span>
-        <span class="icon">★</span>
-      </label>
-      <label>
-        <input type="radio" name="stars" value="3" onClick={() => { tabel[id] = 3 }} />
-        <span class="icon">★</span>
+        <input type="radio" name="stars" value="2" onClick={() => { tabel[id] = 2 }} checked={def === 2 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="4" onClick={() => { tabel[id] = 4 }} />
-        <span class="icon">★</span>
+        <input type="radio" name="stars" value="3" onClick={() => { tabel[id] = 3 }} checked={def === 3 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="5" onClick={() => { tabel[id] = 5 }} />
+        <input type="radio" name="stars" value="4" onClick={() => { tabel[id] = 4 }} checked={def === 4 ? "checked" : ""}/>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+      </label>
+      <label>
+        <input type="radio" name="stars" value="5" onClick={() => { tabel[id] = 5 }} checked={def === 5 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
         <span class="icon">★</span>
@@ -96,7 +105,7 @@ function Page() {
           <td>{name}</td>
           <td>{number_of_vote}</td>
           <td>{rateing}</td>
-          <td>{stars(id_place)}</td>
+          <td>{stars(id_place, Math.round(rateing))}</td>
           <td><button class="add" onClick={() => rate(id_place)}>Rate</button></td>
         </tr>
       )
@@ -109,13 +118,6 @@ function Page() {
         <div class="top">Wolt</div>
         <div class="bottom" aria-hidden="true">Wolt</div>
       </section>
-      {mybutton()}
-      <table>
-        <tbody>
-          {renderTableData()}
-
-        </tbody>
-      </table>
       <p class="small outline">Add New Restaurant</p>
       <table>
         <tr>
@@ -123,6 +125,17 @@ function Page() {
           <td>{stars("new")}</td>
           <td><button class="add" onClick={() => { addNewItem(tabel["new"], document.getElementById("new").value) }}>Add</button></td>
         </tr>
+      </table>
+      {mybutton()}
+      <table>
+        <tbody>
+        <tr>
+          <td><div onClick={() => getItemsSorted("name")}>Name</div></td>
+          <td><div onClick={() => getItemsSorted("number_of_vote")}>Number of vote</div></td>
+          <td><div onClick={() => getItemsSorted("rateing")}>Rateing</div></td>
+        </tr>
+          {renderTableData()}
+        </tbody>
       </table>
     </div>
   )
