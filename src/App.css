@@ -84,6 +84,10 @@
   opacity: 0;
 }
 
+td div {
+  cursor: pointer;
+}
+
 .rating label .icon {
   float: left;
   color: transparent;
@@ -439,9 +443,9 @@ button.add {
 }
 
 table {
-  margin-left: 30%;
-  margin-right: 30%;
-  width: 40%;
+  margin-left: 25%;
+  margin-right: 25%;
+  width: 50%;
 }
 
 input.newItem{
@@ -458,4 +462,37 @@ input.newItem{
   box-sizing: border-box;
   border: none;
   border-bottom: 2px solid rgb(31, 54, 61);
+}
+
+
+.react-dropdown-select {
+  /* Reset */
+  appearance: none;
+  border: none;
+  outline: 0;
+  font: inherit;
+  /* Personalize */
+  width: 20rem;
+  padding: 1rem 4rem 1rem 1rem;
+  color: #333;
+  box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  /* Remove IE arrow */
+  &::-ms-expand {
+    display: none;
+  }
+  /* Remove focus outline */
+  &:focus {
+    outline: none;
+  }
+  /* <option> colors */
+  .span {
+    color: gray;
+    background-color: gray;
+  }
+}
+.react-dropdown-select-item {
+    color: #333;
+    background-color: rgb(228, 218, 218);
+    outline: none;
 }

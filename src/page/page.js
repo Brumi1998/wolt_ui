@@ -1,10 +1,18 @@
 import { React, useState, useEffect } from "react"
-import axios from "axios"
+import Select from "react-dropdown-select";
+
+
+
 
 function Page() {
   const [getResult, setResult] = useState({ 'Item': [] })
+  const [newRestaurnatType, setNewRestaurnatType] = useState()
+  const [priceCategory, setPriceCategory] = useState()
+  const [filterPrice, setFilterPrice] = useState()
+  const [filterType, setFilterType] = useState()
+  const [sortBy, setSortBy] = useState()
+  
   const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
-//  const https = "asd"
   const authHeaders = {}
   const tabel = {}
   console.log(getResult)
@@ -14,7 +22,7 @@ function Page() {
 
   const addNewItem = (rate, itemName) => {
     console.log(rate, itemName)
-    postItem({ 'rateing': rate, 'name': itemName })
+    postItem({ 'rateing': rate, 'name': itemName, 'price': priceCategory, 'type': newRestaurnatType})
   }
   const postItem = (item) => {
     fetch(https, {
@@ -30,6 +38,47 @@ function Page() {
         console.error('Error:', error);
       });
   }
+  const optionsType = [
+    {
+      id: "Mexican",
+      name: 'Mexican'
+    },
+    {
+      id: "Italian",
+      name: 'Italian'
+    },
+    {
+      id: "Greek",
+      name: 'Greek'
+    },
+    {
+      id: "Gluten Free",
+      name: 'Gluten Free'
+    },
+    {
+      id: "American",
+      name: 'American'
+    },
+    {
+      id: "Healty",
+      name: 'Healty'
+    }
+  ];
+  const optionsPrice = [
+    {
+      id: "1",
+      name: "$"
+    },
+    {
+      id: "2",
+      name: "$$"
+    },
+    {
+      id: "3",
+      name: "$$$"
+    }
+  ];
+  
 
 
   const mybutton = () => {
@@ -52,40 +101,40 @@ function Page() {
       .catch(error => console.log(error))
   }
 
-  const getItemsSorted = (key) => {
-    fetch(`${https}?sortBy=${key}`, { mode: "cors", headers: {} })
+  useEffect( () => {
+    fetch(`${https}?sortBy=${sortBy}&filterType=${filterType}&filterPrice=${filterPrice}`, { mode: "cors", headers: {} })
     .then(result => result.json())
     .then(data => setResult({ 'Item': data }))
     .catch(error => console.log(error))
-  }
+  }, [sortBy,filterType,filterPrice])
+
 
   const stars = (id, def) => {
-    tabel[id] = def
     return <form class="rating" id={id}>
       <label>
-        <input type="radio" name="stars" value="1" onClick={() => { tabel[id] = 1 }} checked={def === 1 ? "checked" : ""}/>
+        <input type="radio" name="stars" value="1" onClick={() => { tabel[id] = 1 }} defaultChecked={def === 1 ? "checked" : ""}/>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="2" onClick={() => { tabel[id] = 2 }} checked={def === 2 ? "checked" : ""}/>
-        <span class="icon">★</span>
-        <span class="icon">★</span>
-      </label>
-      <label>
-        <input type="radio" name="stars" value="3" onClick={() => { tabel[id] = 3 }} checked={def === 3 ? "checked" : ""}/>
-        <span class="icon">★</span>
+        <input type="radio" name="stars" value="2" onClick={() => { tabel[id] = 2 }} defaultChecked={def === 2 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="4" onClick={() => { tabel[id] = 4 }} checked={def === 4 ? "checked" : ""}/>
-        <span class="icon">★</span>
+        <input type="radio" name="stars" value="3" onClick={() => { tabel[id] = 3 }} defaultChecked={def === 3 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
         <span class="icon">★</span>
       </label>
       <label>
-        <input type="radio" name="stars" value="5" onClick={() => { tabel[id] = 5 }} checked={def === 5 ? "checked" : ""}/>
+        <input type="radio" name="stars" value="4" onClick={() => { tabel[id] = 4 }} defaultChecked={def === 4 ? "checked" : ""}/>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+        <span class="icon">★</span>
+      </label>
+      <label>
+        <input type="radio" name="stars" value="5" onClick={() => { tabel[id] = 5 }} defaultChecked={def === 5 ? "checked" : ""}/>
         <span class="icon">★</span>
         <span class="icon">★</span>
         <span class="icon">★</span>
@@ -99,12 +148,14 @@ function Page() {
   const renderTableData = () => {
     if (getResult == undefined) { return null }
     return getResult?.Item.map((item, index) => {
-      const { id, name, number_of_vote, rateing, id_place } = item;
+      const { id, name, number_of_vote, rateing, id_place, type, price } = item;
       return (
         <tr key={id}>
           <td>{name}</td>
           <td>{number_of_vote}</td>
-          <td>{rateing}</td>
+          <td>{Math.round((parseFloat(rateing) + Number.EPSILON) * 100) / 100}</td>
+          <td>{type}</td>
+          <td>{"$".repeat(price)}</td>
           <td>{stars(id_place, Math.round(rateing))}</td>
           <td><button class="add" onClick={() => rate(id_place)}>Rate</button></td>
         </tr>
@@ -122,6 +173,26 @@ function Page() {
       <table>
         <tr>
           <td><input class="newItem" placeholder="Name" id="new"></input></td>
+          <td>  
+            <Select
+              classNamePrefix='filter'
+              placeholder="Type"
+              options={optionsType}
+              labelField="name"
+              valueField="id"
+              onChange={(values) => setNewRestaurnatType(values[0]["id"])}
+            />
+          </td>
+          <td>
+            <Select
+                classNamePrefix='filter'
+                placeholder="Price"
+                options={optionsPrice}
+                labelField="name"
+                valueField="id"
+                onChange={(values) => setPriceCategory(values[0]["id"])}
+              />
+          </td>
           <td>{stars("new")}</td>
           <td><button class="add" onClick={() => { addNewItem(tabel["new"], document.getElementById("new").value) }}>Add</button></td>
         </tr>
@@ -130,9 +201,27 @@ function Page() {
       <table>
         <tbody>
         <tr>
-          <td><div onClick={() => getItemsSorted("name")}>Name</div></td>
-          <td><div onClick={() => getItemsSorted("number_of_vote")}>Number of vote</div></td>
-          <td><div onClick={() => getItemsSorted("rateing")}>Rateing</div></td>
+          <td><div onClick={() => setSortBy("name")}>Name</div></td>
+          <td><div onClick={() => setSortBy("number_of_vote")}>Number of vote</div></td>
+          <td><div onClick={() => setSortBy("rateing")}>Rateing</div></td>
+          <td><Select
+                classNamePrefix='filter'
+                placeholder="Type"
+                options={optionsType}
+                labelField="name"
+                valueField="id"
+                onChange={(values) => setFilterType(values[0]["id"])}
+              />
+          </td>
+          <td><Select
+                classNamePrefix='filter'
+                placeholder="Price"
+                options={optionsPrice}
+                labelField="name"
+                valueField="id"
+                onChange={(values) => setFilterPrice(values[0]["id"])}
+              />
+          </td>
         </tr>
           {renderTableData()}
         </tbody>
