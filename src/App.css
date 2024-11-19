@@ -91,6 +91,7 @@ td div {
 .rating label .icon {
   float: left;
   color: transparent;
+  z-index: 1;
 }
 
 .rating label:last-child .icon {
@@ -443,9 +444,9 @@ button.add {
 }
 
 table {
-  margin-left: 25%;
+  margin-left: 10%;
   margin-right: 25%;
-  width: 50%;
+  width: 80%;
 }
 
 input.newItem{
@@ -496,3 +497,22 @@ input.newItem{
     background-color: rgb(228, 218, 218);
     outline: none;
 }
+
+.restaurant-name {
+  color: darkslategray;
+  text-decoration: underline;
+}
+
+.restaurant{ 
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  img {
+    width: 25%;
+    height: auto;
+    align-items: right;
+    object-fit: cover;
+}}

@@ -1,5 +1,7 @@
 import { React, useState, useEffect } from "react"
 import Select from "react-dropdown-select";
+import Restaurant from "./restaurant";
+import Modal from "react-modal";
 
 
 
@@ -11,14 +13,16 @@ function Page() {
   const [filterPrice, setFilterPrice] = useState()
   const [filterType, setFilterType] = useState()
   const [sortBy, setSortBy] = useState()
+  const [showRestaurant, setShowRestaurant] = useState(false)
+  const [restaurantId, setRestaurantId] = useState("0")
   
   const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
   const authHeaders = {}
   const tabel = {}
-  console.log(getResult)
   const rate = (id_place) => {
     postItem({ 'id_place': id_place, 'rateing': tabel[id_place] })
   }
+
 
   const addNewItem = (rate, itemName) => {
     console.log(rate, itemName)
@@ -79,7 +83,13 @@ function Page() {
     }
   ];
   
-
+  const findRestaurant = (id) => {
+    for (let i = 0; i < getResult.Item.length; i++) {
+      if (getResult.Item[i].id_place === id) {
+        return getResult.Item[i]
+      }
+    }
+  }
 
   const mybutton = () => {
     return <div class="container">
@@ -151,7 +161,7 @@ function Page() {
       const { id, name, number_of_vote, rateing, id_place, type, price } = item;
       return (
         <tr key={id}>
-          <td>{name}</td>
+          <td><div class="restaurant-name" onClick={() => {setRestaurantId(id_place); setShowRestaurant(true)}}>{name}</div></td>
           <td>{number_of_vote}</td>
           <td>{Math.round((parseFloat(rateing) + Number.EPSILON) * 100) / 100}</td>
           <td>{type}</td>
@@ -170,6 +180,15 @@ function Page() {
         <div class="bottom" aria-hidden="true">Wolt</div>
       </section>
       <p class="small outline">Add New Restaurant</p>
+      {getResult.Item.length > 0 && <Modal
+        style={{overlay: {zIndex: 1000}}}
+
+        isOpen={showRestaurant}
+        onRequestClose={() => setShowRestaurant(false)}
+        contentLabel="Restaurant"
+      >
+        {Restaurant(findRestaurant(restaurantId), stars, postItem)}
+      </Modal>}
       <table>
         <tr>
           <td><input class="newItem" placeholder="Name" id="new"></input></td>
