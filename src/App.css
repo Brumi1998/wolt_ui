@@ -536,15 +536,52 @@ input.newItem{
   text-decoration: underline;
 }
 
+.ReactModal__Content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+}
+
 .restaurant{ 
   .header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
   }
+  button {
+    width: 15%;
+    margin-left: 5%;
+  }
+  textarea {
+    width: 90%;
+    margin-left: 5%;
+  }
+  td:nth-child(1) {
+    height: auto;
+    align-items: left;
+  }
+
+  td:nth-child(2) {
+    width: 50%;
+    align-items: left;
+  }
+  td:nth-child(3) {
+    width: 15%;
+    align-items: right;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  
+  tr {
+    border-bottom: 1px solid #ddd;
+
+  }
+  
+
 
   img {
-    width: 25%;
+    width: 40%;
     height: auto;
     align-items: right;
     object-fit: cover;

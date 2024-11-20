@@ -180,7 +180,7 @@ function Page() {
       <p class="small outline">Add New Restaurant</p>
       {getResult.Item.length > 0 && <Modal
         style={{overlay: {zIndex: 1000}}}
-
+        portalClassName="modal"
         isOpen={showRestaurant}
         onRequestClose={() => setShowRestaurant(false)}
         contentLabel="Restaurant"
