@@ -34,7 +34,7 @@ function Restaurant(restaurant, stars,post, table) {
                 <div className="header">
                     <div>
                         <h1>{restaurant.name}</h1>
-                        <h4>{restaurant.location}</h4>
+                        <div onClick={() => {window.open("https://maps.google.com?q="+restaurant.location)}}><h4>{restaurant.location}</h4></div>
                     </div>
                     
                     <img src={restaurant.image} alt={restaurant.name} />

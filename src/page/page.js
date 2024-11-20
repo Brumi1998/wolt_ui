@@ -26,7 +26,6 @@ function Page() {
 
 
   const addNewItem = (rate, itemName) => {
-    console.log(rate, itemName)
     postItem({ 'rateing': rate, 'name': itemName, 'price': priceCategory, 'type': newRestaurnatType})
   }
   const postItem = (item) => {
@@ -47,15 +46,20 @@ function Page() {
   
 
   const setTypes = (data) => {
-    setOptionType(  data.map((item, index) => {
-      return {
-        id: item.type,
-        name: item.type
-      }
-    }))
-  }
+    let list = [];
+    data.forEach(element => {
+      list.push(element.type); // Use push instead of append
+    });
+    console.log(list, "list");
+  
+    let optionType = [{id: "undefined", name: "All"}];
+    Array.from(new Set(list)).forEach(element => { // Convert Set to array
+      optionType.push({ id: element, name: element });
+    });
 
-  console.log(optionType, "optionsType")
+    setOptionType(optionType);
+  };
+
 
   const optionsPrice = [
     {
