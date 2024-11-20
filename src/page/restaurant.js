@@ -1,8 +1,9 @@
 import { React, useState, useEffect } from "react";
 
-function Restaurant(restaurant, stars, rate) {
+function Restaurant(restaurant, stars,post, table) {
     console.log(JSON.parse(restaurant.items), "items")
-    [rating, setRating] = useState(Math.round(restaurant.rateing))
+
+
     const foods = () => {   
         return JSON.parse(restaurant.items).map((food, index) => {
             return (
@@ -14,18 +15,17 @@ function Restaurant(restaurant, stars, rate) {
             )
         })
     }
-    // const rateModal = (id_place) => {
-    //     rate({ 'id_place': id_place, 'rateing':  document.getElementById("modal")?.value})
-    //   }
-    
-
 
     return (
         <div className="restaurant">
             {restaurant !== undefined &&
             <>
                 <div className="header">
-                    <h1>{restaurant.name}</h1>
+                    <div>
+                        <h1>{restaurant.name}</h1>
+                        <h4>{restaurant.address}</h4>
+                    </div>
+                    
                     <img src={restaurant.image} alt={restaurant.name} />
                 </div>
                 <h2>Type {restaurant.type}</h2>
@@ -33,7 +33,7 @@ function Restaurant(restaurant, stars, rate) {
                 <h4>Rating {restaurant.rateing} from {restaurant.number_of_vote} votes</h4>
                 <div class="header" id={restaurant.id_place}>
                     {stars("modal", Math.round(restaurant.rateing))}
-                    <button className="add" onClick={() => {console.log(document.getElementById("modal")?.value, "asd")}}>Rate</button>
+                    <button className="add" onClick={() => {post({ 'id_place': restaurant.id_place, 'rateing': table["modal"] })}}>Rate</button>
                 </div>
                 <table>
                     {foods()}

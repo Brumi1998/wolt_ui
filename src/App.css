@@ -431,22 +431,55 @@ p {
 }
 
 button.add {
-  background-color: #1F363D;
-  border: none;
-  color: white;
-  padding: 20px;
+  background-color: #36A9AE;
+  background-image: linear-gradient(#37ADB2, #329CA0);
+  border: 1px solid #2A8387;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system,".SFNSDisplay-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 17px;
+  line-height: 100%;
+  margin: 0;
+  outline: 0;
+  padding: 11px 15px 12px;
   text-align: center;
+  transition: box-shadow .05s ease-in-out,opacity .05s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+}
+
+button.add:hover {
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
   text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  border-radius: 50%;
+  transition-duration: .15s, .15s;
+}
+
+button.add:active {
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset, rgba(0, 0, 0, 0.4) 0 1px 1px;
+}
+
+button.add:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+button.add:disabled:active {
+  pointer-events: none;
+}
+
+button.add:disabled:hover {
+  box-shadow: none;
 }
 
 table {
-  margin-left: 10%;
-  margin-right: 25%;
-  width: 80%;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
 }
 
 input.newItem{

@@ -15,7 +15,7 @@ function Page() {
   const [sortBy, setSortBy] = useState()
   const [showRestaurant, setShowRestaurant] = useState(false)
   const [restaurantId, setRestaurantId] = useState("0")
-  
+
   const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
   const authHeaders = {}
   const tabel = {}
@@ -40,7 +40,8 @@ function Page() {
       })
       .catch(error => {
         console.error('Error:', error);
-      });
+      })
+      .finally(() => {getItems()})
   }
   const optionsType = [
     {
@@ -105,17 +106,14 @@ function Page() {
     </div>
   }
   const getItems = () => {
-    fetch(https, { mode: "cors", headers: {} })
-      .then(result => result.json())
-      .then(data => setResult({ 'Item': data }))
-      .catch(error => console.log(error))
-  }
-
-  useEffect( () => {
     fetch(`${https}?sortBy=${sortBy}&filterType=${filterType}&filterPrice=${filterPrice}`, { mode: "cors", headers: {} })
     .then(result => result.json())
     .then(data => setResult({ 'Item': data }))
     .catch(error => console.log(error))
+  }
+
+  useEffect( () => {
+    getItems()
   }, [sortBy,filterType,filterPrice])
 
 
@@ -187,7 +185,7 @@ function Page() {
         onRequestClose={() => setShowRestaurant(false)}
         contentLabel="Restaurant"
       >
-        {Restaurant(findRestaurant(restaurantId), stars, postItem)}
+        {Restaurant(findRestaurant(restaurantId), stars, postItem, tabel)}
       </Modal>}
       <table>
         <tr>
