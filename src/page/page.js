@@ -15,6 +15,7 @@ function Page() {
   const [sortBy, setSortBy] = useState()
   const [showRestaurant, setShowRestaurant] = useState(false)
   const [restaurantId, setRestaurantId] = useState("0")
+  const [optionType, setOptionType] = useState()  
 
   const https = "https://jby0skz9lk.execute-api.eu-central-1.amazonaws.com/dev/hello"
   const authHeaders = {}
@@ -43,32 +44,19 @@ function Page() {
       })
       .finally(() => {getItems()})
   }
-  const optionsType = [
-    {
-      id: "Mexican",
-      name: 'Mexican'
-    },
-    {
-      id: "Italian",
-      name: 'Italian'
-    },
-    {
-      id: "Greek",
-      name: 'Greek'
-    },
-    {
-      id: "Gluten Free",
-      name: 'Gluten Free'
-    },
-    {
-      id: "American",
-      name: 'American'
-    },
-    {
-      id: "Healty",
-      name: 'Healty'
-    }
-  ];
+  
+
+  const setTypes = (data) => {
+    setOptionType(  data.map((item, index) => {
+      return {
+        id: item.type,
+        name: item.type
+      }
+    }))
+  }
+
+  console.log(optionType, "optionsType")
+
   const optionsPrice = [
     {
       id: "1",
@@ -112,9 +100,20 @@ function Page() {
     .catch(error => console.log(error))
   }
 
+  const getInitialItems = () => {
+    fetch(`${https}`, { mode: "cors", headers: {} })
+    .then(result => result.json())
+    .then(data => setTypes(data))
+    .catch(error => console.log(error))
+  }
+
   useEffect( () => {
     getItems()
   }, [sortBy,filterType,filterPrice])
+
+  useEffect(() => {
+    getInitialItems()
+  }, [])
 
 
   const stars = (id, def) => {
@@ -194,7 +193,7 @@ function Page() {
             <Select
               classNamePrefix='filter'
               placeholder="Type"
-              options={optionsType}
+              options={optionType}
               labelField="name"
               valueField="id"
               onChange={(values) => setNewRestaurnatType(values[0]["id"])}
@@ -224,7 +223,7 @@ function Page() {
           <td><Select
                 classNamePrefix='filter'
                 placeholder="Type"
-                options={optionsType}
+                options={optionType}
                 labelField="name"
                 valueField="id"
                 onChange={(values) => setFilterType(values[0]["id"])}
